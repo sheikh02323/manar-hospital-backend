@@ -1,1 +1,1 @@
-# manar-huospital
+# manar-hospital
