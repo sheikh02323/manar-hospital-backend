@@ -19,6 +19,7 @@ User.init(
       allowNull: true,
       unique: true,
     },
+
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
