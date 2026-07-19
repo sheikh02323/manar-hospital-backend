@@ -1,37 +1,32 @@
 import { UserRepository } from "../repositories/user.repository";
+import { IUser } from "../models/user.model";
 
 export class UserService {
   // Get all users
-  static async getAllUsers() {
-    return await UserRepository.getAllUsers();
+  static async getAllUsers(): Promise<IUser[]> {
+    return UserRepository.getAllUsers();
   }
 
   // Get a single user by ID
-  static async getUserById(id: string) {
-    return await UserRepository.getUserById(id);
+  static async getUserById(id: string): Promise<IUser | null> {
+    return UserRepository.getUserById(id);
   }
 
   // Create a new user
-  static async createUser(userData: any) {
-    return await UserRepository.createUser(userData);
+  static async createUser(data: Partial<IUser>): Promise<IUser> {
+    return UserRepository.createUser(data);
   }
 
   // Update a user by ID
-  static async updateUser(id: string, updatedData: any) {
-    const user = await UserRepository.getUserById(id);
-    if (user) {
-      return await UserRepository.updateUser(user, updatedData);
-    }
-    return null;
+  static async updateUser(
+    id: string,
+    data: Partial<IUser>,
+  ): Promise<IUser | null> {
+    return UserRepository.updateUser(id, data);
   }
 
   // Delete a user by ID
-  static async deleteUser(id: string) {
-    const user = await UserRepository.getUserById(id);
-    if (user) {
-      await UserRepository.deleteUser(user);
-      return true;
-    }
-    return false;
+  static async deleteUser(id: string): Promise<IUser | null> {
+    return UserRepository.deleteUser(id);
   }
 }

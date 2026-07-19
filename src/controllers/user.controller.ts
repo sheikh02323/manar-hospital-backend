@@ -2,77 +2,68 @@ import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 
 export class UserController {
-  // Create a new user
-  static async createUser(req: Request, res: Response) {
-    try {
-      const newUser = await UserService.createUser(req.body);
-      res.status(201).json(newUser);
-    } catch (error) {
-      const err = error as Error;
-      res.status(500).json({ error: err.message });
-    }
-  }
-
   // Get all users
   static async getAllUsers(req: Request, res: Response) {
     try {
       const users = await UserService.getAllUsers();
-      res.status(200).json(users);
+      res.json(users);
     } catch (error) {
-      const err = error as Error;
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Failed to fetch users" });
     }
   }
 
-  // Get a single user by ID
+  // Get user by ID
   static async getUserById(req: Request, res: Response) {
+    const { id } = req.params;
     try {
-      // Fix: Ensure userId is a string
-      const userId = req.params.id as string;
-      const user = await UserService.getUserById(userId);
+  const user = await UserService.getUserById(String(id));
       if (user) {
-        res.status(200).json(user);
+        res.json(user);
       } else {
         res.status(404).json({ error: "User not found" });
       }
     } catch (error) {
-      const err = error as Error;
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Failed to fetch user" });
     }
   }
 
-  // Update a user by ID
+  // Create a new user
+  static async createUser(req: Request, res: Response) {
+    try {
+      const user = await UserService.createUser(req.body);
+      res.status(201).json(user);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create user" });
+    }
+  }
+
+  // Update user by ID
   static async updateUser(req: Request, res: Response) {
+    const { id } = req.params;
     try {
-      // Fix: Ensure userId is a string
-      const userId = req.params.id as string;
-      const updatedData = req.body;
-      const updatedUser = await UserService.updateUser(userId, updatedData);
+   const updatedUser = await UserService.updateUser(id as string, req.body);
       if (updatedUser) {
-        res.status(200).json(updatedUser);
+        res.json(updatedUser);
       } else {
         res.status(404).json({ error: "User not found" });
       }
     } catch (error) {
-      const err = error as Error;
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Failed to update user" });
     }
   }
 
-  // Delete a user by ID
+  // Delete user by ID
   static async deleteUser(req: Request, res: Response) {
+    const { id } = req.params;
     try {
-      // Fix: Ensure userId is a string
-      const userId = req.params.id as string;
-      const deleted = await UserService.deleteUser(userId);
-      if (deleted) {
+      const deletedUser = await UserService.deleteUser(id as string);
+      if (deletedUser) {
         res.status(204).send();
       } else {
         res.status(404).json({ error: "User not found" });
       }
     } catch (error) {
-      const err = error as Error;
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Failed to delete user" });
     }
   }
 }

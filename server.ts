@@ -1,19 +1,17 @@
-import { app } from './app';
-import { sequelize } from "./src/config/config";
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./src/config/mongodb.config";
+import { userRouter } from "./src/api/user.api"; // ✅ Use lowercase 'userRouter'
 
-const PORT = process.env.PORT || 3000;
+dotenv.config();
+connectDB(); // Connect to MongoDB
 
-const startServer = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Database connected successfully.');
+const app = express();
+const PORT = process.env.PORT || 8080;
 
-        app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
-        });
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-};
+app.use(express.json());
+app.use("/users", userRouter); // ✅ Now this matches
 
-startServer();
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

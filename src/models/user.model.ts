@@ -1,39 +1,18 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../config/config";
+import mongoose, { Document, Schema } from "mongoose";
 
-class User extends Model {}
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+}
 
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true,
-    },
+const UserSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
 
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-  },
-  {
-    sequelize,
-    modelName: "User",
-    timestamps: false,
-  },
-);
+const User = mongoose.model<IUser>("User", UserSchema);
 
-export { User };
+export default User;
+ 
